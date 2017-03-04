@@ -1,0 +1,12 @@
+---
+
+- name: creating the snapshot 02-custom
+  hosts: localhost ansible_connection=local
+
+  vars:
+    snapshot_name: 02-custom
+
+  gather_facts: no
+
+  roles:
+      - snapshot-create

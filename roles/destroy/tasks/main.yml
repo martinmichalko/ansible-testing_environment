@@ -1,0 +1,6 @@
+---
+
+- include: t-00-info.yml
+- include: t-01-destroy-active-domains.yml
+- include: t-00-info.yml
+- include: t-02-undefine-inactive-vms.yml

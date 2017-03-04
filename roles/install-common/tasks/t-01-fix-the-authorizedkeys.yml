@@ -1,0 +1,12 @@
+---
+
+- name: Set authorized key took from file
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', '/home/martin/.ssh/id_rsa-sen.pub') }}"
+
+
+#if there is problem with the selinux permitions of the authorised_keys file
+#- name: To fix the ssh directory login/su as the affected user
+#  command: restorecon -v ~/.ssh/authorized_keys

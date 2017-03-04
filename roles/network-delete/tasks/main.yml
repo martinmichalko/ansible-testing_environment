@@ -1,0 +1,67 @@
+---
+- name: list all existing defined virtual networks
+  command: virsh net-list --all
+  register: virt_net_list
+
+- name: list only active defined virtual networks
+  command: virsh net-list
+  register: virt_net_list_active
+
+- name: DEBUG existing networks
+  debug:
+    msg: "{{virt_net_list.stdout}}"
+  tags: debug
+
+- name: DEBUG active networks
+  debug:
+    msg: "{{virt_net_list_active.stdout}}"
+  tags: debug
+
+- name: DEBUG only work with existing
+  debug:
+    msg: "{{project}}.{{item.0.name}}"
+  when: '"{{project}}.{{item.0.name}}" in virt_net_list.stdout'
+  with_subelements:
+    - "{{networks}}"
+    - config
+  tags: debug
+
+- name: DEBUG only with active networks
+  debug:
+    msg: "{{project}}.{{item.0.name}}"
+  when: '"{{project}}.{{item.0.name}}" in virt_net_list_active.stdout'
+  with_subelements:
+    - "{{networks}}"
+    - config
+  tags: debug
+
+- name: DEBUG only with active networks and all networks
+  debug:
+    msg: "{{project}}.{{item.0.name}}"
+  when: ("{{project}}.{{item.0.name}}" in virt_net_list.stdout) and
+      ("{{project}}.{{item.0.name}}" in virt_net_list_active.stdout)
+  with_subelements:
+    - "{{networks}}"
+    - config
+  tags: debug
+
+# we can destroy only active networks
+- name: destroy  active networks during loop over subelements in networks
+  virt_net:
+    name: "{{project}}.{{item.0.name}}"
+    command: destroy
+  when: '"{{project}}.{{item.0.name}}" in virt_net_list_active.stdout'
+  with_subelements: 
+    - "{{networks}}"
+    - config
+
+# we have to delete all networks which are set to inactive with destroy command
+
+- name: undefine deactivated networks during loop over subelements in networks
+  virt_net:
+    name: "{{project}}.{{item.0.name}}"
+    command: undefine
+  when: '"{{project}}.{{item.0.name}}" in virt_net_list.stdout'
+  with_subelements:
+    - "{{networks}}"
+    - config

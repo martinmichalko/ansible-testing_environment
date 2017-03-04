@@ -1,0 +1,10 @@
+---
+
+- name: newtork delete
+  hosts: localhost ansible_connection=local
+
+  gather_facts: no
+
+  roles:
+      - network-delete
+

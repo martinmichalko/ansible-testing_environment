@@ -1,0 +1,8 @@
+---
+
+- name: wait for server to reboot and report SSH availability
+  local_action: wait_for host={{ansible_host}} state=started port=22 delay=10 timeout=300
+
+- name: gatherig facts
+  setup:
+

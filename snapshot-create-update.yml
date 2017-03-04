@@ -1,0 +1,13 @@
+---
+
+- name: creating the snapshot 01-after-update
+  hosts: localhost ansible_connection=local
+
+  vars:
+    snapshot_name: 01-after-update
+
+  gather_facts: no
+
+  roles:
+      - snapshot-create
+

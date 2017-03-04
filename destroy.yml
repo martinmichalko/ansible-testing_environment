@@ -1,0 +1,10 @@
+---
+
+- name: complete delete of the environment {{project}}
+  hosts: localhost ansible_connection=local
+
+  gather_facts: no
+
+  roles:
+      - destroy
+

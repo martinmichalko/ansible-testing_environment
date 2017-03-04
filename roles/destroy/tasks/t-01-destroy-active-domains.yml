@@ -1,0 +1,10 @@
+---
+
+- name: destroy active vm domains for all nodes
+  virt:
+    name: "{{project}}.{{item}}"
+    command: destroy
+  when: (virt_info["{{project}}.{{item}}"] is defined) and
+        (virt_info["{{project}}.{{item}}"]["state"] == "running")
+  with_items: "{{nodes}}"
+

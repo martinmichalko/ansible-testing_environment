@@ -1,0 +1,25 @@
+---
+# main tasks file for install-common
+#- include: t-00-wait-for-access.yml
+#we should wait before the snapshot is created - so we have to have separate role
+- include: t-01-fix-the-authorizedkeys.yml
+  tags: ssh_key
+
+- include: t-03-update-packages.yml
+  tags: update_all
+
+- include: t-02-hostname.yml
+  tags: hostname
+  # hostname change influenced also the dns resolv info and thatswhy reboot
+  # is planned as next step
+
+- include: t-reboot.yml
+  tags: reboot
+
+- include: t-04-ntp.yml
+  tags: ntp
+
+- include: t-05-additional.yml
+  tags: additional
+#  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+# it is enough to use when condition inside the t-04 only for installing the package

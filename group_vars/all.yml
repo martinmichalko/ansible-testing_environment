@@ -1,0 +1,10 @@
+---
+
+proxy_env:
+  http_proxy: "http://192.168.1.1:3128"
+  https_proxy: "https://192.168.1.1:3128"
+
+ntp_config_server: 192.168.1.1
+timezone: "Europe/Bratislava"
+
+os_root_password: 123

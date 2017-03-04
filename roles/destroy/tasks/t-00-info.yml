@@ -1,0 +1,14 @@
+---
+
+- name: grab the info about the virtual machines -all
+  virt:
+    command: info
+    #name: "{{project}}.{{item}}"
+  register: virt_info
+  #with_items: "{{nodes}}"
+
+- name: DEBUG the basic variable virt_info
+  debug:
+    msg: "virt_info is {{virt_info}}"
+  tags: debug
+

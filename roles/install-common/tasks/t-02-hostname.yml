@@ -1,0 +1,46 @@
+---
+- name: debug the hostname variable
+  debug:
+    var: inventory_hostname
+  tags: debug
+
+- name: change the hostname in hostname
+  hostname:
+    name: "{{inventory_hostname}}"
+
+# /etc/hosts has to be updated separately
+- name: replace the IP 127.0.0.1 and the hostname localhost in the hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127.0.0.1\s*localhost'
+    line: "127.0.0.1       localhost"
+
+- name: delete the IP 127.0.1.1 and the hostname in the hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127.0.1.1'
+    state: absent
+
+- name: insert mgmt ip adress and and the hostname in the hosts file
+  lineinfile:
+    dest: /etc/hosts
+    insertafter: '^127.0.0.1'
+    regexp: "^{{ansible_default_ipv4.address}}"
+    line: "{{ansible_default_ipv4.address}}   {{inventory_hostname}}   {{inventory_hostname_short}}"
+  when: dns_planned == True
+
+- name: insert also other nodes to the /etc/hosts file
+  lineinfile:
+    dest: /etc/hosts
+    insertafter: '^127.0.0.1'
+    line: "{{hostvars[item]['ansible_default_ipv4']['address']}}   {{hostvars[item]['ansible_fqdn']}} {{hostvars[item]['ansible_hostname']}}"
+  with_inventory_hostnames: nodes
+  when: dns_planned == False
+
+
+#    regexp: "{{ ansible_default_ipv4.address}}"
+#    insertafter: "^::1"
+#    line: "{{ ansible_default_ipv4.address}}        {{ inventory_hostname }}    {{ inventory_hostname_short }}"
+#
+
+

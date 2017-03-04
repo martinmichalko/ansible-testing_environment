@@ -1,0 +1,49 @@
+---
+#- name: list existing domains
+#  command: virsh list --all
+#  register: domain_list
+
+#- name: DEBUG the domain list
+#  debug:
+#    var: domain_list
+#  tags: debug
+
+#final goal delete defined snapshot
+# first - does domain exist?
+
+- name: grab the info about the virtual machines -all
+  virt:
+    command: info
+    #name: "{{project}}.{{item}}"
+  register: virt_info
+  #with_items: "{{nodes}}"
+
+- name: DEBUG the domain list
+  debug:
+    var: virt_info
+  tags: debug
+
+# second - does snapshot (declared in playbook start) exist?
+- name: list existing snapshots for all nodes
+  command: virsh snapshot-list "{{project}}.{{item}}" --name
+  #command: virsh snapshot-list kolla.node3 --name
+  register: snapshot_list
+  when: 'virt_info["{{project}}.{{item}}"] is defined'
+  with_items: "{{nodes}}"
+
+- name: DEBUG the variable existing snapshots
+  debug:
+    var: snapshot_list
+  tags: debug
+
+- name: DEBUG show snapshot {{snapshot_name}}
+  debug:
+    msg: "node {{item.1}} has snapshot {{snapshot_list.results[item.0].stdout}}"
+  when: snapshot_name in snapshot_list.results[item.0].stdout
+  with_indexed_items: "{{nodes}}"
+  tags: debug
+
+- name: delete snapshot for all nodes
+  command: virsh snapshot-delete "{{project}}.{{item.1}}" "{{snapshot_name}}"
+  when: snapshot_name in snapshot_list.results[item.0].stdout
+  with_indexed_items: "{{nodes}}"

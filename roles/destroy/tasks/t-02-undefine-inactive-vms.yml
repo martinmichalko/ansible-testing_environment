@@ -1,0 +1,16 @@
+---
+
+- name: udefine the vm domains for all nodes
+  virt:
+    name: "{{project}}.{{item}}"
+    command: undefine
+  when: (virt_info["{{project}}.{{item}}"] is defined) and
+        (virt_info["{{project}}.{{item}}"]["state"] == "shutdown")
+  with_items: "{{nodes}}"
+
+- name: delete the qow2 files from disk
+  file:
+    path: "{{vm_image_dir}}/{{project}}.{{item}}.qcow2"
+    state: absent
+  with_items: "{{nodes}}"
+
