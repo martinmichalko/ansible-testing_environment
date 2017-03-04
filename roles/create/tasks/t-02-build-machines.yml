@@ -41,12 +41,12 @@
 # thats why centos (tested for 7) needs command without hostname and resizing
 # debian has to have hostame defined in this moment
 - name: creation qow2 images for nodes with libguestfs virt-builder centos
-  command: virt-builder "{{vm_os_type}}" --root-password "password:{{vm_root_password}}" --format qcow2 --run "{{inventory_dir}}/roles/create/templates/{{item}}/post-install-all.sh" --output "{{vm_image_dir}}/{{project}}.{{item}}.qcow2"
+  command: virt-builder "{{vm_os_type}}" --root-password "password:{{os_root_password}}" --format qcow2 --run "{{inventory_dir}}/roles/create/templates/{{item}}/post-install-all.sh" --output "{{vm_image_dir}}/{{project}}.{{item}}.qcow2"
   with_items: "{{nodes}}"
   when: vm_distribution == 'centos'
 
 - name: creation qow2 images for nodes with libguestfs virt-builder debian
-  command: virt-builder "{{vm_os_type}}" --hostname "{{item}}" --root-password "password:{{vm_root_password}}" --size "{{vm_image_size}}" --format qcow2 --run "{{inventory_dir}}/roles/create/templates/{{item}}/post-install-all.sh" --output "{{vm_image_dir}}/{{project}}.{{item}}.qcow2"
+  command: virt-builder "{{vm_os_type}}" --hostname "{{item}}" --root-password "password:{{ os_root_password}}" --size "{{vm_image_size}}" --format qcow2 --run "{{inventory_dir}}/roles/create/templates/{{item}}/post-install-all.sh" --output "{{vm_image_dir}}/{{project}}.{{item}}.qcow2"
   with_items: "{{nodes}}"
   when: vm_distribution == 'debian'
 
