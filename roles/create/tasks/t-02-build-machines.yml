@@ -51,5 +51,5 @@
   when: vm_distribution == 'debian'
 
 - name: deploy images with libvirt ->  virt-install tool
-  command: virt-install -n "{{project}}.{{item.1}}" -r "2048" --vcpus "2" --import --disk "path={{vm_image_dir}}/{{project}}.{{item.1}}.qcow2,format=qcow2" --graphics "vnc,port={{vm_vnc_port+item.0}},listen=0.0.0.0" --noautoconsole --network "network={{project}}.{{networks.0.name}},model={{vm_net_model}}" --network "network={{project}}.{{networks.1.name}},model={{vm_net_model}}"
+  command: virt-install -n "{{project}}.{{item.1}}" -r "{{vm_memory}}" --vcpus "2" --import --disk "path={{vm_image_dir}}/{{project}}.{{item.1}}.qcow2,format=qcow2" --graphics "vnc,port={{vm_vnc_port+item.0}},listen=0.0.0.0" --noautoconsole --network "network={{project}}.{{networks.0.name}},model={{vm_net_model}}" --network "network={{project}}.{{networks.1.name}},model={{vm_net_model}}"
   with_indexed_items: "{{nodes}}"

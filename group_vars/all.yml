@@ -10,6 +10,7 @@ vm_release: 8
 #for centos image size is not working
 vm_image_size: 5G
 
+vm_memory: 2048
 vm_image_dir: /virt/sen-imgs
 os_root_password: 123
 vm_vnc_port: 63700
