@@ -7,7 +7,24 @@
       name: "{{item}}"
       state: present
     with_items: "{{additional_packages}}"
-    when: additional_packages is defined
+    when: (additional_packages is defined) and (item != "ranger")
+
+  - block:
+    - name: download and unpack ranger
+      unarchive:
+        src: http://nongnu.org/ranger/ranger-stable.tar.gz
+        dest: /usr/local/bin
+        remote_src: True
+
+    - name: create the command alias
+      lineinfile:
+        dest: /root/.bashrc
+        insertafter: "# User specific aliases and functions"
+        regexp: "alias ranger=/usr/local/bin/ranger-1.8.1/ranger.py"
+        line: "alias ranger=/usr/local/bin/ranger-1.8.1/ranger.py"
+
+    when: '"ranger" in additional_packages'
+
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 #DEBIAN
