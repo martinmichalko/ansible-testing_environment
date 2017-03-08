@@ -13,6 +13,10 @@
   # hostname change influenced also the dns resolv info and thatswhy reboot
   # is planned as next step
 
+- include: t-centos-disk-increase01.yml
+  when: (ansible_distribution == 'CentOS') and (vm_image_size[:-1]|int > 6)
+  tags: disk_resize
+
 - include: t-reboot.yml
   tags: reboot
 

@@ -1,6 +1,6 @@
 ---
 - include: snapshot-delete-custom.yml
 - include: snapshot-delete-update.yml
-- include: snapshot-delete.yml
+#- include: snapshot-delete.yml
 - include: destroy.yml
 - include: network-delete.yml

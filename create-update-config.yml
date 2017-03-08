@@ -6,8 +6,8 @@
 - include: wait-for-access.yml
   tags: build
 
-- include: snapshot-create.yml
-  tags: build
+#- include: snapshot-create.yml
+#  tags: build
 
 - include: install-common.yml
 - include: snapshot-create-update.yml
