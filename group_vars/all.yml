@@ -1,6 +1,6 @@
 ---
 
-project: mariadb
+project: virtuale
 dns_resolver: 192.168.1.1
 
 #vm_os_type: centos-7.3
@@ -20,11 +20,11 @@ vm_vnc_port: 63700
 networks:
   - name: mgmt
     config:
-      - gateway: 192.168.92.1
+      - gateway: 192.168.82.1
         netmask: 255.255.255.0
   - name: prod
     config:
-      - gateway: 192.168.93.1
+      - gateway: 192.168.83.1
         netmask: 255.255.255.0
 
 first_ip_address: 10
@@ -38,8 +38,6 @@ vm_net_model: e1000
 #nodes listing:
 nodes:
   - node1
-  - node2
-  - node3
 
 dns_planned: False
 

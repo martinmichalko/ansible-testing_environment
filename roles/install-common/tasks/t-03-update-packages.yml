@@ -12,6 +12,7 @@
     yum:
       name: '*'
       state: latest
+      disable_gpg_check: yes
   #  register: update_realised
 
   - name: deactivate the selinux permanently edit the /etc/sysconfig/selinux
@@ -19,7 +20,7 @@
       dest: /etc/sysconfig/selinux
       regexp: '^SELINUX='
       line: 'SELINUX=disabled'
-      
+
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 #block for debian part

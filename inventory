@@ -7,6 +7,4 @@ ansible_ssh_user=root
 ansible_ssh_pass={{ os_root_password }}
 
 [nodes]
-node1.mariadb.mate.solutions ansible_host=192.168.92.10
-node2.mariadb.mate.solutions ansible_host=192.168.92.11
-node3.mariadb.mate.solutions ansible_host=192.168.92.12
+node1.virtuale.mate.solutions ansible_host=192.168.82.10
