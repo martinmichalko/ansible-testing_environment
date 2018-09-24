@@ -24,3 +24,12 @@ Create the new directory for new project. Copy file inventory and host_vars/loca
 ```bash
 ansible-playbook -i inventory /path/to/playbook/files/create-update-config.yml --extra-vars "@host_vars/localhost.yml" --skip-tags "debug"
 ```
+
+
+These commands should be run as root and in working directory of testing environment to have the correct inventory usage, directory /virt/sen-imgs/ has to be created manually and sshpass program has to be installed with apt-get install sshpass
+
+When you would like to destroy whole testing environment you can run:
+
+```bash
+ansible-playbook -i /data/projects/ansible2-6/pb/ansible-testing_environment/inventory  /data/projects/ansible2-6/pb/ansible-testing_environment/destroy-sn-delete.yml --extra-vars "@group_vars/all.yml" -e 'ansible_python_interpreter=/usr/bin/python'
+```

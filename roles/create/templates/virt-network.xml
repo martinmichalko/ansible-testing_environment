@@ -1,9 +1,0 @@
-<network>
-  <name>{{ project }}.{{ item.0.name }}</name>
-  <forward mode='nat'/>
-  <bridge name='{{ project }}.{{ item.0.name }}' stp='on' delay='0'/>
-  <virtualport type='openvswitch'>
-  </virtualport>
-  <ip address='{{ item.1.gateway }}' netmask='{{ item.1.netmask }}'>
-  </ip>
-</network>

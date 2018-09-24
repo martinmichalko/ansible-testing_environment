@@ -1,8 +1,6 @@
 ---
 - name: wait for the access to vms...
-  hosts: all:!localhost
+  hosts: all:!localhost:!source
   gather_facts: no
   roles:
       - wait-for-access
-
-

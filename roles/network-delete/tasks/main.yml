@@ -19,49 +19,39 @@
 
 - name: DEBUG only work with existing
   debug:
-    msg: "{{project}}.{{item.0.name}}"
-  when: '"{{project}}.{{item.0.name}}" in virt_net_list.stdout'
-  with_subelements:
-    - "{{networks}}"
-    - config
+    msg: "{{project}}.{{item.key}}"
+  when: '"{{project}}.{{item.key}}" in virt_net_list.stdout'
+  with_dict: "{{networks}}"
   tags: debug
 
 - name: DEBUG only with active networks
   debug:
-    msg: "{{project}}.{{item.0.name}}"
-  when: '"{{project}}.{{item.0.name}}" in virt_net_list_active.stdout'
-  with_subelements:
-    - "{{networks}}"
-    - config
+    msg: "{{project}}.{{item.key}}"
+  when: '"{{project}}.{{item.key}}" in virt_net_list_active.stdout'
+  with_dict: "{{networks}}"
   tags: debug
 
 - name: DEBUG only with active networks and all networks
   debug:
-    msg: "{{project}}.{{item.0.name}}"
-  when: ("{{project}}.{{item.0.name}}" in virt_net_list.stdout) and
-      ("{{project}}.{{item.0.name}}" in virt_net_list_active.stdout)
-  with_subelements:
-    - "{{networks}}"
-    - config
+    msg: "{{project}}.{{item.key}}"
+  when: ("{{project}}.{{item.key}}" in virt_net_list.stdout) and
+      ("{{project}}.{{item.key}}" in virt_net_list_active.stdout)
+  with_dict: "{{networks}}"
   tags: debug
 
 # we can destroy only active networks
 - name: destroy  active networks during loop over subelements in networks
   virt_net:
-    name: "{{project}}.{{item.0.name}}"
+    name: "{{project}}.{{item.key}}"
     command: destroy
-  when: '"{{project}}.{{item.0.name}}" in virt_net_list_active.stdout'
-  with_subelements: 
-    - "{{networks}}"
-    - config
+  when: '"{{project}}.{{item.key}}" in virt_net_list_active.stdout'
+  with_dict: "{{networks}}"
 
 # we have to delete all networks which are set to inactive with destroy command
 
 - name: undefine deactivated networks during loop over subelements in networks
   virt_net:
-    name: "{{project}}.{{item.0.name}}"
+    name: "{{project}}.{{item.key}}"
     command: undefine
-  when: '"{{project}}.{{item.0.name}}" in virt_net_list.stdout'
-  with_subelements:
-    - "{{networks}}"
-    - config
+  when: '"{{project}}.{{item.key}}" in virt_net_list.stdout'
+  with_dict: "{{networks}}"

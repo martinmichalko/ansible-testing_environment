@@ -1,0 +1,58 @@
+---
+
+- name: DEBUG single variable from nested dictionary / list
+  debug:
+    msg: "{{inventory_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
+  with_dict: "{{networks}}"
+  tags: debug
+
+# check if the networks are already defined
+- name: list all existing defined virtual networks
+  command: virsh net-list --all
+  register: virt_net_list
+
+- name: define networks during loop over subelements in networks
+  command: virsh net-define "{{inventory_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
+  when: '"{{project}}.{{item.key}}" not in virt_net_list.stdout'
+  with_dict: "{{networks}}"
+
+
+- name: start networks during loop over subelements in networks
+  command: virsh net-start "{{project}}.{{item.key}}"
+  when: '"{{project}}.{{item.key}}" not in virt_net_list.stdout'
+  with_dict: "{{networks}}"
+
+- name: Configure a network to be automatically started at boot
+  command: virsh net-autostart "{{project}}.{{item.key}}"
+  when: '"{{project}}.{{item.key}}" not in virt_net_list.stdout'
+  with_dict: "{{networks}}"
+
+- name: delete the directory for network xml files
+  file:
+    path: "{{inventory_dir}}/roles/network-create/templates/xml/networks"
+    state: absent
+
+#- name: Define a new network
+#  virt_net:
+#    command: define
+#    name: "{{project}}.{{item.key}}"
+#    xml: "{{inventory_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
+#  with_dict: "{{networks}}"
+#
+#- name: Start a network
+#  virt_net:
+#    command: create
+#    name: "{{project}}.{{item.key}}"
+#  with_dict: "{{networks}}"
+#
+#- name:  Ensure that a network is active (needs to be defined and built first)
+#  virt_net:
+#    state: active
+#    name:  "{{project}}.{{item.key}}"
+#  with_dict: "{{networks}}"
+#
+#- name: Ensure that a given network will be started at boot
+#  virt_net:
+#    autostart: yes
+#    name: "{{project}}.{{item.key}}"
+#  with_dict: "{{networks}}"

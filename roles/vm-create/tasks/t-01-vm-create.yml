@@ -1,0 +1,84 @@
+---
+
+- name: prepare preseed.cfg script from template
+  template:
+    src: "preseed.cfg.j2"
+    dest: "{{inventory_dir}}/roles/vm-create/templates/preseed.cfg"
+    owner: martin
+    group: martin
+    mode: 0644
+
+- name: list virtual machine volumes
+  command: "ls {{volumes_location}}"
+  register: disks
+  changed_when: "disks.rc != 0"
+
+- name: DEBUG create disk
+  debug:
+    msg: "virsh vol-create-as --pool {{volume_pool}} --name {{source}}.qcow2
+          --capacity {{vm_disk_size}} --format qcow2"
+  tags: debug
+
+- name: create disk
+  command: "virsh vol-create-as --pool {{volume_pool}} --name {{source}}.qcow2
+           --capacity {{vm_disk_size}} --format qcow2"
+  when: source not in disks.stdout
+
+- name: get all virtual machines from the pool
+  virt:
+    command: "list_vms"
+  register: vms
+
+- name: DEBUG list variable virtual machines
+  debug:
+    var: vms
+    var: networks['mgmt'].key
+  tags: debug
+
+- name: DEBUG command virt-install
+  debug:
+    msg: "virt-install --location {{install_location}} --name {{project}}-{{source}}
+          --vcpus {{vm_cpus}},maxvcpus={{vm_cpus}} --ram {{vm_memory}}
+          --network network={{project}}.mgmt
+          --disk {{volumes_location}}/{{source}}.qcow2
+          --initrd-inject={{inventory_dir}}/roles/vm-create/templates/preseed.cfg
+          --extra-args=auto --graphics vnc --noautoconsole"
+  tags: debug
+
+- name: create vm
+  command: "virt-install --location {{install_location}} --name {{project}}-{{source}}
+        --vcpus {{vm_cpus}},maxvcpus={{vm_cpus}} --ram {{vm_memory}}
+        --network network={{project}}.mgmt
+        --disk {{volumes_location}}/{{source}}.qcow2
+        --initrd-inject={{inventory_dir}}/roles/vm-create/templates/preseed.cfg
+        --extra-args=auto --graphics vnc --noautoconsole"
+  when: source not in vms.list_vms
+
+- name: prepare preseed.cfg script from template
+  file:
+    path: "{{inventory_dir}}/roles/vm-create/templates/preseed.cfg"
+    state: absent
+
+- name: DEBUG list variable virtual machines
+  debug:
+    var: "{{item.key}}"
+  with_dict: "{{networks}}"
+  tags: debug
+
+- name: list already defined virtual machine interfaces
+  command: "virsh domiflist --domain {{project}}-{{source}}"
+  register: vm_interfaces
+  changed_when: "vm_interfaces.rc != 0"
+
+- name: DEBUG attach new interace to the additional networks command
+  debug:
+    msg: "virsh attach-interface --domain {{project}}-{{source}} --type network
+          --source {{project}}.{{item.key}} --config --live"
+  with_dict: "{{networks}}"
+  tags: debug
+
+- name: attach new interace to the additional networks
+  command: "virsh attach-interface --domain {{project}}-{{source}} --type network
+            --source {{project}}.{{item.key}} --config --live"
+  when: item.key not in vm_interfaces.stdout
+  with_dict: "{{networks}}"

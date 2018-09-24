@@ -1,10 +1,10 @@
 ---
 
-- name: create the qcow2 images 
+- name: create the networks
   hosts: localhost ansible_connection=local
 
   #we are working only on the qcow2 images... so no info about vms
   gather_facts: no
 
   roles:
-      - create
+      - network-create

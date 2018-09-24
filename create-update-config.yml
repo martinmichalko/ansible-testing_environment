@@ -1,6 +1,13 @@
 ---
 
-- include: create.yml
+# create networks if do not exists
+- include: network-create.yml
+
+# create source
+- include: vm-create.yml
+  tags: build
+
+- include: vm-clone.yml
   tags: build
 
 - include: wait-for-access.yml

@@ -12,16 +12,16 @@ iface lo inet loopback
 # Management Network
 auto eth0
 iface eth0 inet static
-    address {{networks.0.config.0.gateway[:-1]}}{{(first_ip_address + item.0)}} 
-    netmask {{networks.0.config.0.netmask}}
-    gateway {{networks.0.config.0.gateway}}
+    address {{networks['mgmt'].gateway[:-1]}}{{(first_ip_address + item.0)}}
+    netmask {{networks['mgmt'].netmask}}
+    gateway {{networks['mgmt'].gateway}}
     dns-nameservers {{dns_resolver}}
 
 # second Network
 auto eth1
 iface eth1 inet static
-    address {{networks.1.config.0.gateway[:-1]}}{{(first_ip_address + item.0)}}
-    netmask {{networks.1.config.0.netmask}}
+    address {{networks['prod'].gateway[:-1]}}{{(first_ip_address + item.0)}}
+    netmask {{networks['prod'].netmask}}
     dns-nameservers {{dns_resolver}}
 EOF
 
