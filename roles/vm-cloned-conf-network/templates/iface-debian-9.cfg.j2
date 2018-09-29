@@ -1,0 +1,4 @@
+auto {{iface_item.1}}
+iface {{iface_item.1}} inet static
+    address {{networks[sorted_network_keys_list[iface_item.0+1]].gateway[:-1]}}{{(first_ip_address + selected_index|int)}}
+    netmask {{networks[sorted_network_keys_list[iface_item.0+1]].netmask}}

@@ -1,0 +1,4 @@
+---
+- name: revert nodes to the selected snapshot
+  command: virsh snapshot-revert "{{project}}-{{item}}" {{snapshot_name}}
+  with_items: "{{nodes}}"

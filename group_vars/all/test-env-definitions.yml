@@ -1,5 +1,4 @@
 ---
-install_location: "http://ftp.sk.debian.org/debian/dists/stable/main/installer-amd64/"
 volume_pool: virt
 volumes_location: "/data/virt"
 
@@ -39,14 +38,16 @@ first_ip_address: 11
 #derived from network_gateway and first_ip_address
 
 #nodes listing:
-source: "source"
+source: source
 source_ip_address: 5
 
 nodes:
   - node1
   - node2
   - node3
-  
+
+domain: "{{project}}.mate.solutions"
+
 dns_planned: False
 
 additional_packages:

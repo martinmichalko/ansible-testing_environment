@@ -1,0 +1,7 @@
+---
+- name: change the config and update, start ntp,...
+  hosts: :source:localhost
+  gather_facts: no
+
+  roles:
+    - vm-cloned-conf-network

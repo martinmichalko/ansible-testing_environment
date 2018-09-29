@@ -10,39 +10,61 @@
     command: "list_vms"
   register: vms
 
-- name: only if cloned nodes do not exist
+- name: prepare the sublist nodes_long_list and define empty nodes_short_list source_full_ip_address
   set_fact:
-     missing_node: true
-     source_full_ip_address: "{{networks['mgmt'].gateway[:-1]}}{{source_ip_address}}"
-  when: item not in vms
+    existing_project_nodes_long_list: "{{ vms['list_vms']|select('search', project)|list }}"
+    existing_project_nodes_short_list: []
+    missing_node_list: []
+    source_full_ip_address: "{{networks['mgmt'].gateway[:-1]}}{{source_ip_address}}"
+
+- name: set existing_project_nodes_short_list
+  set_fact:
+    existing_project_nodes_short_list: "{{existing_project_nodes_short_list + [item.split('-')[1]]}}"
+  with_items: "{{existing_project_nodes_long_list}}"
+
+- name: prepare the missing_node_list when item not in existing_project_nodes_short_list
+  set_fact:
+    #missing_node: true
+    missing_node_list: "{{missing_node_list + [item]}}"
+  when: item not in existing_project_nodes_short_list
   with_items: "{{nodes}}"
 
-- name: DEBUG missing node
-  debug:
-    var: missing_node
+#- name: preparation and cloning only with missing_node_list
+- block:
 
-- name: preparation and cloning itself
-  block:
-  - name: wait for server to reboot and report SSH availability
-    local_action: wait_for host={{source_full_ip_address}} state=started port=22 delay=0 timeout=1000
-
-  - name: shutdown source
+  - name: check source status
     virt:
+      name: "{{project}}-{{source}}"
+      command: status
+    register: source_status
+
+  #- name: if the source is running then
+  - block:
+
+    - name: wait for server to reboot and report SSH availability
+      local_action: wait_for host={{source_full_ip_address}} state=started port=22 delay=0 timeout=1000
+
+    - name: shutdown source
+      virt:
         name: "{{project}}-{{source}}"
         state: shutdown
 
-  - name: master domain has to be stopped before cloning
-    local_action: wait_for host={{source_full_ip_address}} port=22 state=stopped
+    - name: master domain has to be stopped before cloning
+      local_action: wait_for host={{source_full_ip_address}} port=22 state=stopped
+
+    when: source_status.status == "running"
+    #end of block if the source is running then
+
+  - name: test if missing vms have no images on directory
+    file:
+      path: "{{volumes_location}}/{{project}}-{{item}}.qcow2"
+      state: absent
+    with_items: "{{missing_node_list}}"
 
   - name: clone machine
     command: "virt-clone --original {{project}}-{{source}} --name {{project}}-{{item}}
               --file /data/virt/{{project}}-{{item}}.qcow2"
-    with_items: "{{nodes}}"
+    with_items: "{{missing_node_list}}"
 
-  - name: start all nodes
-    virt:
-      name: "{{project}}-{{item}}"
-      state: running
-    with_items: "{{nodes}}"
-
-  when: missing_node
+  when: missing_node_list is defined
+  # end block preparation and cloning only with missing_node_list

@@ -1,12 +1,17 @@
 ---
 - name: create snapshot template - only the name {{snapshot_name}}
   template:
-    src: virsh-snapshot.xml_template
+    src: virsh-snapshot.xml_template.j2
     dest: roles/snapshot-create/templates/snapshot{{snapshot_name}}.xml
     owner: martin
     group: martin
     mode: 0644
 
 - name: create snapshot for all nodes
-  command: virsh snapshot-create "{{project}}.{{item}}" "roles/snapshot-create/templates/snapshot{{snapshot_name}}.xml"
+  command: virsh snapshot-create "{{project}}-{{item}}" "roles/snapshot-create/templates/snapshot{{snapshot_name}}.xml"
   with_items: "{{nodes}}"
+
+- name: delete ptreviously prepared snapshot template - {{snapshot_name}}
+  file:
+    path: roles/snapshot-create/templates/snapshot{{snapshot_name}}.xml
+    state: absent

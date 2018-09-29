@@ -1,6 +1,6 @@
 ---
 - name: change the config and update, start ntp,...
-  hosts: all:!localhost
+  hosts: all:!localhost:!source
   roles:
       - install-common
   environment: "{{proxy_env}}"

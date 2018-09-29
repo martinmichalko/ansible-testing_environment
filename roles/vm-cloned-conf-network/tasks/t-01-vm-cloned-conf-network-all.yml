@@ -1,0 +1,10 @@
+---
+
+- name: set source_full_ip_address
+  set_fact:
+    source_full_ip_address: "{{networks['mgmt'].gateway[:-1]}}{{source_ip_address}}"
+
+
+- name: t-02-vm-cloned-conf-network.yml selected_node="{{item.1}}" selected_index="{{item.0}}"
+  include: t-02-vm-cloned-conf-network.yml selected_node="{{item.1}}" selected_index="{{item.0}}"
+  with_indexed_items: "{{nodes}}"

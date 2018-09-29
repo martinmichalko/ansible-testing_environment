@@ -1,9 +1,0 @@
-DEVICE="ens4"
-NM_CONTROLLED="yes"
-ONBOOT="yes"
-TYPE="Ethernet"
-BOOTPROTO="static"
-NAME="connection-ens4"
-IPADDR={{ ansible_ipv4_prod_network }}
-NETMASK=255.255.255.0
-DNS1=192.168.1.1

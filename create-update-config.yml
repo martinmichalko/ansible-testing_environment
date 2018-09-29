@@ -1,13 +1,19 @@
 ---
 
+
 # create networks if do not exists
 - include: network-create.yml
 
 # create source
 - include: vm-create.yml
   tags: build
+# after creation source is running to check if it is finished
 
 - include: vm-clone.yml
+  tags: build
+  # source is shutdown and all nodes are cloned and shut down with the same ipaddress
+
+- include: vm-cloned-conf-network.yml
   tags: build
 
 - include: wait-for-access.yml

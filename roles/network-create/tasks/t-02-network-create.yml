@@ -1,18 +1,12 @@
 ---
 
-- name: DEBUG single variable from nested dictionary / list
-  debug:
-    msg: "{{inventory_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
-  with_dict: "{{networks}}"
-  tags: debug
-
 # check if the networks are already defined
 - name: list all existing defined virtual networks
   command: virsh net-list --all
   register: virt_net_list
 
 - name: define networks during loop over subelements in networks
-  command: virsh net-define "{{inventory_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
+  command: virsh net-define "{{playbook_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
   when: '"{{project}}.{{item.key}}" not in virt_net_list.stdout'
   with_dict: "{{networks}}"
 
@@ -27,16 +21,17 @@
   when: '"{{project}}.{{item.key}}" not in virt_net_list.stdout'
   with_dict: "{{networks}}"
 
-- name: delete the directory for network xml files
+- name: delete xml file for each network
   file:
-    path: "{{inventory_dir}}/roles/network-create/templates/xml/networks"
+    path: "{{playbook_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
     state: absent
+  with_dict: "{{networks}}"
 
 #- name: Define a new network
 #  virt_net:
 #    command: define
 #    name: "{{project}}.{{item.key}}"
-#    xml: "{{inventory_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
+#    xml: "{{playbook_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
 #  with_dict: "{{networks}}"
 #
 #- name: Start a network

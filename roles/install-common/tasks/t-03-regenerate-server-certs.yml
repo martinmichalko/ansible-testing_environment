@@ -1,0 +1,21 @@
+---
+
+- name: Delete old ssh host keys
+  file:
+    path: "/etc/ssh/ssh_host_*"
+    state: absent
+
+- name: Ansible delete file glob
+  find:
+    paths: /etc/ssh/
+    patterns: ssh_host_*
+  register: files_to_delete
+
+- name: Ansible remove file glob
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ files_to_delete.files }}"
+
+- name: Debian or Ubuntu Linux Regenerate OpenSSH Host Keys
+  command: dpkg-reconfigure openssh-server

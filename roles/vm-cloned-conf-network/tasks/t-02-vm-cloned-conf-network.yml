@@ -1,0 +1,77 @@
+---
+
+- name: start the selected node
+  virt:
+    name: "{{project}}-{{selected_node}}"
+    state: running
+  when: ansible_host == 'localhost'
+
+#- name: process only the virtual machine
+- block:
+
+  - pause:
+      seconds: 6
+
+  - name: wait for server to reboot and report SSH availability
+    local_action: wait_for host={{ansible_host}} state=started port=22 delay=3 timeout=300
+
+  - name: Gathering facts
+    setup:
+
+  - name: DEBUG interfaces
+    debug:
+      msg: "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
+
+  - name: create interfaces list for "selected_node"
+    set_fact:
+      interfaces_list: "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
+      sorted_network_keys_list: "{{networks.keys()|list|sort}}"
+
+  - name: create interfaces list for "selected_node"
+    set_fact:
+      network_int_list: "{{ interfaces_list | reject('search','lo') | list | sort()}}"
+
+# interfaces_file - disappoitment
+# another module to work - overkill
+
+  - name: "set interfaces to the vm {{network_int_list[0]}} is default network iface"
+    template:
+      src: "iface-default-{{vm_distribution}}-{{vm_release}}.cfg.j2"
+      dest: "/etc/network/interfaces.d/{{default_iface_item}}.cfg"
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - "{{network_int_list[0]}}"
+    loop_control:
+      loop_var: default_iface_item
+    register: task_result1
+
+  - name: "set other interfaces to the vm {{ network_int_list | reject('search',network_int_list[0]) | list | sort()}}"
+    template:
+      src: "iface-{{vm_distribution}}-{{vm_release}}.cfg.j2"
+      dest: "/etc/network/interfaces.d/{{iface_item.1}}.cfg"
+      owner: root
+      group: root
+      mode: 0644
+    with_indexed_items: "{{ network_int_list | reject('search',network_int_list[0]) | list | sort()}}"
+    loop_control:
+      loop_var: iface_item
+    register: task_result2
+
+  - name: set /etc/network/interfaces
+    template:
+      src: "interfaces-{{vm_distribution}}-{{vm_release}}.cfg.j2"
+      dest: "/etc/network/interfaces"
+      owner: root
+      group: root
+      mode: 0644
+    register: task_result3
+
+  - name: Reboot immediately
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+    when: task_result1 is changed or task_result2 is changed or task_result3 is changed
+
+  when: ansible_host == source_full_ip_address

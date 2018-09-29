@@ -1,19 +1,8 @@
 ---
 
-- name: DEBUG Looping over Subelements in networks
-  debug:
-    var: networks
-  tags: debug
-
-- name: DEBUG Looping over Subelements in networks
-  debug:
-    msg: "Network={{item.key}} gateway={{item.value.gateway}} netmask={{item.value.netmask}}"
-  with_dict: "{{networks}}"
-  tags: debug
-
 - name: create the directory for network xml files
   file:
-    path: "{{inventory_dir}}/roles/network-create/templates/xml/networks"
+    path: "{{playbook_dir}}/roles/network-create/templates/xml/networks"
     owner: martin
     group: martin
     mode: 0755
@@ -22,7 +11,7 @@
 - name: create xml for each network
   template:
     src: virt-network.xml
-    dest: "{{inventory_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
+    dest: "{{playbook_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
     owner: martin
     group: martin
     mode: 0644

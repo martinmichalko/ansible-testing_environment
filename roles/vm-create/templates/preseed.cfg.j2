@@ -355,6 +355,25 @@ d-i grub-installer/bootdev  string /dev/sda
 # Note: options passed to the installer will be added automatically.
 #d-i debian-installer/add-kernel-opts string nousb
 
+### Finishing up the installation
+# During installations from serial console, the regular virtual consoles
+# (VT1-VT6) are normally disabled in /etc/inittab. Uncomment the next
+# line to prevent this.
+#d-i finish-install/keep-consoles boolean true
+
+# Avoid that last message about the install being complete.
+d-i finish-install/reboot_in_progress note
+
+# This will prevent the installer from ejecting the CD during the reboot,
+# which is useful in some situations.
+#d-i cdrom-detect/eject boolean false
+
+# This is how to make the installer shutdown when finished, but not
+# reboot into the installed system.
+#d-i debian-installer/exit/halt boolean true
+# This will power off the machine instead of just halting it.
+#d-i debian-installer/exit/poweroff boolean true
+
 ### Preseeding other packages
 # Depending on what software you choose to install, or if things go wrong
 # during the installation process, it's possible that other questions may
@@ -386,26 +405,11 @@ d-i grub-installer/bootdev  string /dev/sda
 # still a usable /target directory. You can chroot to /target and use it
 # directly, or use the apt-install and in-target commands to easily install
 # packages and run commands in the target system.
+# 1. adding the ssh key for root for passwordless SSH
+# 2. disable wait during grub
 d-i preseed/late_command string \
   in-target sh -c "mkdir -p --mode=0700 /root/.ssh"; \
   in-target sh -c "echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+qS9RMwG+FZI22hM34Kts/DGyUmW42EB0AmHbtrRkJ5KQwLW9y0Q6AqVaIAvWTczRGpY6auL9drbjyNDd096YsAfug08JNYMHEJlrvMsZxZdHpO12I5STqsH6vF12NJUgstHJi/ot0UYfZLDM1MfelRd9v602FqqQ5eO+e4RPPibr9D9VcYGIr+gEz9t/O9Iagh1he3JKhaRwP9P/kdsnS6le7N1v7xgrrC8PiVxSM8NMRp1nxnylJFTi08giGmV/6SRuERz5bfpCI0Fk1bGCsrENZJQFFm8olewCgB0d7GuynIkNH/xZuxTyyuM2ueOkPiXnHtM41lGjK8E6/dcB martin@stone' > /root/.ssh/authorized_keys"; \
-  in-target sh -c "chmod 0600 /root/.ssh/authorized_keys"
-
-### Finishing up the installation
-# During installations from serial console, the regular virtual consoles
-# (VT1-VT6) are normally disabled in /etc/inittab. Uncomment the next
-# line to prevent this.
-#d-i finish-install/keep-consoles boolean true
-
-# Avoid that last message about the install being complete.
-d-i finish-install/reboot_in_progress note
-
-# This will prevent the installer from ejecting the CD during the reboot,
-# which is useful in some situations.
-#d-i cdrom-detect/eject boolean false
-
-# This is how to make the installer shutdown when finished, but not
-# reboot into the installed system.
-#d-i debian-installer/exit/halt boolean true
-# This will power off the machine instead of just halting it.
-#d-i debian-installer/exit/poweroff boolean true
+  in-target sh -c "chmod 0600 /root/.ssh/authorized_keys" ; \
+  in-target sh -c "sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/' /etc/default/grub" ; \
+  in-target sh -c "update-grub2"

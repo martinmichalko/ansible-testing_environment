@@ -1,9 +1,0 @@
-DEVICE="ens4"
-NM_CONTROLLED="no"
-ONBOOT=yes
-TYPE=Ethernet
-BOOTPROTO=static
-NAME="connection-ens4"
-IPADDR={{ networks.1.gateway[:-1] }}{{ (first_ip_address + item.0) }}
-NETMASK={{ networks.1.netmask }}
-DNS1={{ dns_resolver }}

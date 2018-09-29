@@ -1,0 +1,12 @@
+---
+
+- name: revert the snapshot 01-after-update on nodes according to the nodes list
+  hosts: localhost ansible_connection=local
+
+  vars:
+    snapshot_name: 01-after-update
+
+  gather_facts: no
+
+  roles:
+      - snapshot-revert
