@@ -1,2 +1,3 @@
 ---
 install_location: "http://ftp.sk.debian.org/debian/dists/stable/main/installer-amd64/"
+ansible_python_interpreter: /usr/bin/python

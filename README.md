@@ -18,13 +18,17 @@ used:
 ### Prerequisites
 
 system packages requirements:
-openvswitch-switch curl libvirt-bin virtinst qemu-utils 
+openvswitch-switch curl libvirt-bin virtinst qemu-utils
 
 
 ### Usage
+in the project directory - change values for variables in group_vars and as root fire command:
+```bash
+ansible-playbook -i inventory create-update-config.yml
+```
 
-Separate your own file of test environment variables `group_vars/test-env-all.yml` change them for new project and create whole environment with working directory testing environment with command:
+Separate your own file of test environment variables `group_vars/test-env-all.yml` change them for new project and create whole environment with working directory in the project testing environment as root with command:
 
 ```bash
-ansible-playbook -i {{ path to docker-icinga files }}/inventory create-update-config.yml --extra-vars "@{{ path to docker-icinga files }}//group_vars/test-env-all.yml"
+ansible-playbook -i {{path_to_your_new_project_dir}}/inventory create-update-config.yml --extra-vars "@{{path_to_your_new_project_dir}}//group_vars/test-env-all.yml" --extra-vars "ansible_python_interpreter=/usr/bin/python"
 ```
