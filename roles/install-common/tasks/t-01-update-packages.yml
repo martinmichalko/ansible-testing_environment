@@ -1,66 +1,40 @@
 ---
-
-# block for centos part
-- block:
-  - name: add proxy to yum conf
-    lineinfile:
-      dest: /etc/yum.conf
-      regexp: 'proxy='
-      line: 'proxy={{ proxy_env.http_proxy }}'
-
-  - name: upgrade all packages
-    yum:
-      name: '*'
-      state: latest
-      disable_gpg_check: yes
-  #  register: update_realised
-
-  - name: deactivate the selinux permanently edit the /etc/sysconfig/selinux
-    lineinfile:
-      dest: /etc/sysconfig/selinux
-      regexp: '^SELINUX='
-      line: 'SELINUX=disabled'
-
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
-
 #block for debian part
-- block:
-  - name: correct the resolv.conf for debian
-    template:
-      src: resolv.conf.j2
-      dest: /etc/resolv.conf
-      owner: root
-      group: root
-      mode: 0644
+- name: correct the resolv.conf for debian
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 0644
 
-  - name: Check that the somefile.conf exists
-    stat:
-      path: /etc/apt/sources.list
-    register: stat_result
+- name: Check that the somefile.conf exists
+  stat:
+    path: /etc/apt/sources.list
+  register: stat_result
 
-  - name: backup the previous sources lists file
-    command: mv /etc/apt/sources.list /etc/apt/sources.list.bak
-    when: stat_result.stat.exists == True
+- name: backup the previous sources lists file
+  command: mv /etc/apt/sources.list /etc/apt/sources.list.bak
+  when: stat_result.stat.exists == True
 
-  - name: copy the new file sources lists
-    copy:
-      src: roles/install-common/templates/apt-sources-list-net
-      dest: /etc/apt/sources.list.d/sources-net.list
-      owner: root
-      group: root
-      mode: 0644
+- name: copy the new file sources lists
+  copy:
+    src: roles/install-common/templates/apt-sources-list-net
+    dest: /etc/apt/sources.list.d/sources-net.list
+    owner: root
+    group: root
+    mode: 0644
 
-  - name: add proxy to apt get definitions if defined
-    template:
-      src: apt-proxy.j2
-      dest: /etc/apt/apt.conf.d/00proxy
-      owner: root
-      group: root
-      mode: 0644
+- name: add proxy to apt get definitions if defined
+  template:
+    src: apt-proxy.j2
+    dest: /etc/apt/apt.conf.d/00proxy
+    owner: root
+    group: root
+    mode: 0644
 
-  - name: upgrade all packages
-    apt:
-      upgrade: dist
-      update_cache: yes
-    register: update_realised
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+- name: upgrade all packages
+  apt:
+    upgrade: dist
+    update_cache: yes
+  register: update_realised

@@ -3,17 +3,10 @@
 - name: change the local timezone
   command: timedatectl set-timezone Europe/Bratislava
 
-- name: install ntp package
-  yum:
-    name: ntp
-    state: present
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
-
 - name: install ntp package debian
   apt:
     name: ntp
     state: present
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 # customize the /etc/ntp.conf file
 
@@ -37,18 +30,9 @@
     regexp: 'server 192.168.1.1'
     line: 'server 192.168.1.1'
 
-#not needed in debian
-- name: start and enable the ntpd service
-  systemd:
-    name: ntpd
-    state: started
-    enabled: yes
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
-
 # in debian needed restart
 - name: start and enable the ntpd service
   systemd:
     name: ntp
     state: restarted
     enabled: yes
-  when: ansible_distribution == 'Debian'
