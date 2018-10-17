@@ -25,10 +25,10 @@
 
 # second - does snapshot (declared in playbook start) exist?
 - name: list existing snapshots for all nodes
-  command: virsh snapshot-list "{{project}}.{{item}}" --name
+  command: virsh snapshot-list "{{project}}-{{item}}" --name
   #command: virsh snapshot-list kolla.node3 --name
   register: snapshot_list
-  when: 'virt_info["{{project}}.{{item}}"] is defined'
+  when: 'virt_info["{{project}}-{{item}}"] is defined'
   with_items: "{{nodes}}"
 
 - name: DEBUG the variable existing snapshots
@@ -44,6 +44,6 @@
   tags: debug
 
 - name: delete snapshot for all nodes
-  command: virsh snapshot-delete "{{project}}.{{item.1}}" "{{snapshot_name}}"
+  command: virsh snapshot-delete "{{project}}-{{item.1}}" "{{snapshot_name}}"
   when: snapshot_name in snapshot_list.results[item.0].stdout
   with_indexed_items: "{{nodes}}"
