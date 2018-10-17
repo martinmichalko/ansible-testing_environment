@@ -1,13 +1,13 @@
 ---
 
 - name: create the qcow2 images
-  hosts: localhost ansible_connection=local
+  hosts: localhost
 
   #we are working only on the qcow2 images... so no info about vms
   gather_facts: no
 
   vars:
-    source_ipaddress: 
+    source_ipaddress:
 
   roles:
       #external role from vm-create project

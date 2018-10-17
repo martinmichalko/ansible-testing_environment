@@ -1,7 +1,7 @@
 ---
 
 - name: newtork delete
-  hosts: localhost ansible_connection=local
+  hosts: localhost
 
   gather_facts: no
 

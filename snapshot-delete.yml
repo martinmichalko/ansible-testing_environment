@@ -1,7 +1,7 @@
 ---
 
 - name: snapshot delete
-  hosts: localhost ansible_connection=local
+  hosts: localhost
 
   vars:
     snapshot_name: 01-after-install
@@ -10,4 +10,3 @@
 
   roles:
       - snapshot-delete
-

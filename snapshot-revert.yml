@@ -1,7 +1,7 @@
 ---
 
 - name: revert the snapshot 01-after-update on nodes according to the nodes list
-  hosts: localhost ansible_connection=local
+  hosts: localhost
 
   vars:
     snapshot_name: 01-after-update
