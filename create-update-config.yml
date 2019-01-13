@@ -10,10 +10,12 @@
 # after creation source is running to check if it is finished
 
 - include: vm-clone.yml
+  when: "'source' in groups.keys()"
   tags: build
   # source is shutdown and all nodes are cloned and shut down with the same ipaddress
 
 - include: vm-cloned-conf-network.yml
+  when: "'source' in groups.keys()"
   tags: build
 
 - include: wait-for-access.yml
