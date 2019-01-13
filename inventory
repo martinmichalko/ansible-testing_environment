@@ -4,6 +4,13 @@ localhost ansible_connection=local
 ansible_connection=ssh
 ansible_ssh_user=root
 
+#names of nodes have to be same as the nodes list in test-env-all
+
+#if you do not want to use source:
+#1) comment or delete it from the inventory file
+#2) name of source change to the short name af the first node and ip change also
+
+
 [source]
 source.virtuale.mate.solutions ansible_host=192.168.82.5
 
