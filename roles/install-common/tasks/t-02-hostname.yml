@@ -21,7 +21,7 @@
     regexp: '^127.0.1.1'
     state: absent
 
-- name: test is hosts file already exists
+- name: test if hosts file already exists
   shell: grep {{groups.nodes[0]}} /etc/hosts || true
   register: hosts_test
 
