@@ -21,7 +21,8 @@
   set_fact:
     existing_project_nodes_short_list: "{{existing_project_nodes_short_list + [item.split('-')[1]]}}"
   with_items: "{{existing_project_nodes_long_list}}"
-
+  when: project == item.split('-')[0]
+  
 - name: prepare the missing_node_list when item not in existing_project_nodes_short_list
   set_fact:
     #missing_node: true
