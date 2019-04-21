@@ -95,7 +95,7 @@ d-i passwd/make-user boolean false
 #d-i passwd/root-password password r00tme
 #d-i passwd/root-password-again password r00tme
 # or encrypted using a crypt(3)  hash.
-d-i passwd/root-password-crypted password $6$nobyZvwDLr$W9mam7YYmCgHzmsthWjAa1zo4gKP2c5qYSL07RudIU0zZdA3N4Een6CWnOaqyRtJpsYaw8C80Bh4rv7V11jxH/
+d-i passwd/root-password-crypted password $6$pIMIp11NLd$qvPQMpCFDRP71s6suRpZ3mq9lzw58m2.n9rdRJSvB9/Fw6aH2ikqK8duULmiyOA2VLYG6gNc5weDOx8CvxF4M/
 
 # To create a normal user account.
 #d-i passwd/user-fullname string Debian User
@@ -409,7 +409,7 @@ d-i finish-install/reboot_in_progress note
 # 2. disable wait during grub
 d-i preseed/late_command string \
   in-target sh -c "mkdir -p --mode=0700 /root/.ssh"; \
-  in-target sh -c "echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+qS9RMwG+FZI22hM34Kts/DGyUmW42EB0AmHbtrRkJ5KQwLW9y0Q6AqVaIAvWTczRGpY6auL9drbjyNDd096YsAfug08JNYMHEJlrvMsZxZdHpO12I5STqsH6vF12NJUgstHJi/ot0UYfZLDM1MfelRd9v602FqqQ5eO+e4RPPibr9D9VcYGIr+gEz9t/O9Iagh1he3JKhaRwP9P/kdsnS6le7N1v7xgrrC8PiVxSM8NMRp1nxnylJFTi08giGmV/6SRuERz5bfpCI0Fk1bGCsrENZJQFFm8olewCgB0d7GuynIkNH/xZuxTyyuM2ueOkPiXnHtM41lGjK8E6/dcB martin@stone' > /root/.ssh/authorized_keys"; \
+  in-target sh -c "echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDtV0ZkUoh1awdrhPfcgtpDkbZzBXmqk23YTdthfyzQt0kETwo9TUlRRvOdy/xNQijlCZacjMPVV81emsjIgN+L1j9xltRRMsRMAXi5kvsFe1F5Z0VkUlKDK9Tey9MPptHm1581btI+OCF4WiUjDjbzfSpvjtdb6cswE7D80MZWY8NuzO/F1iXD+//9KCnKkIWQLV9wIxHCX3chPD0dIsyFZe3oU7AJqfkCFgtk6InY2zgCLqTjSrbkNCMxdqkx3AeqeqG9CYuwoiHjMRTQnJbMZGo872DaZh4aRNsPfK0kkdK3SWFOkFU4rJEkcAhBfbSJH/ozIkqN89peRDGOWcqd martin@stone' > /root/.ssh/authorized_keys"; \
   in-target sh -c "chmod 0600 /root/.ssh/authorized_keys" ; \
   in-target sh -c "sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/' /etc/default/grub" ; \
   in-target sh -c "update-grub2"
