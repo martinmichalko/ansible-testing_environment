@@ -1,0 +1,10 @@
+---
+
+  - name: start source if exists
+    virt:
+      name: "{{project}}-source"
+      state: running
+    when:
+      #Multiple conditions that all need to be true (a logical ‘and’) can also be specified as a list
+      - '"source.{{domain}}" in groups["all"]'
+      - ansible_host == 'localhost'
