@@ -19,6 +19,8 @@ os_root_password: 123
 
 #each node will have its own port with increment 1 according to list
 
+# how the virtual network is to be connected to the physical LAN: nat, route, open, ...
+forward_mode: nat
 #network definition
 networks:
   mgmt:

@@ -1,6 +1,6 @@
 <network>
   <name>{{ project }}.{{ item.key }}</name>
-  <forward mode='nat'/>
+  <forward mode='{{ forward_mode }}'/>
   <bridge name='{{ project }}.{{ item.key }}' stp='on' delay='0'/>
   <virtualport type='openvswitch'>
   </virtualport>
