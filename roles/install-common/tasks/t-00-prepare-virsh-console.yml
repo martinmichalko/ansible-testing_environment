@@ -1,0 +1,23 @@
+---
+#block for debian part
+- name: systemctl enable and start serial-getty@ttyS0.service
+  systemd:
+    name: serial-getty@ttyS0
+    state: started
+    enabled: yes
+
+- name: replace in GRUB_CMDLINE_LINUX_DEFAULT="quiet" with "console=tty0 console=ttyS0"
+  replace:
+    path: /etc/default/grub
+    regexp: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet"'
+    replace: 'GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0"'
+  notify:
+  - update grub
+
+- name: replace in GRUB_CMDLINE_LINUX_DEFAULT="quiet" with "console=tty0 console=ttyS0"
+  replace:
+    path: /etc/default/grub
+    regexp: '#GRUB_TERMINAL=console'
+    replace: 'GRUB_TERMINAL="serial console"'
+  notify:
+  - update grub
