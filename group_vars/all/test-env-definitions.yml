@@ -15,7 +15,6 @@ vm_disk_size: "8G"
 vm_memory: 2048
 vm_cpus: 2
 vm_image_dir: "/data/virt"
-os_root_password: 123
 
 #each node will have its own port with increment 1 according to list
 
