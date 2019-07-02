@@ -10,7 +10,6 @@
 
 - name: delete the qow2 files from disk
   file:
-    path: "{{vm_image_dir}}/{{project}}.{{item}}.qcow2"
+    path: "{{volumes_location}}/{{project}}.{{item}}.qcow2"
     state: absent
   with_items: "{{nodes}}"
-
