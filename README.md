@@ -27,7 +27,7 @@ in the project directory - change values for variables in group_vars and as root
 ansible-playbook -i inventory create-update-config.yml
 ```
 
-Separate your own file of test environment variables `group_vars/test-env-all.yml` change them for new project and create whole environment with working directory in the project testing environment as root with command:
+Separate your own file of test environment variables `group_vars/all/test-env-definitions.yml` change them for new project and create whole environment with working directory in the project testing environment as root with command:
 
 ```bash
 ansible-playbook -i {{path_to_your_new_project_dir}}/inventory {{path_to_your_ansible_test_env_project_dir}}/create-update-config.yml --extra-vars "@{{path_to_your_new_project_dir}}/group_vars/all/test-env-definitions.yml" --extra-vars "ansible_python_interpreter=/usr/bin/python"
