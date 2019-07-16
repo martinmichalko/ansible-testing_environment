@@ -1,0 +1,2 @@
+---
+ansible_python_interpreter: /data/projects/ansible2-8/bin/python3
