@@ -10,7 +10,7 @@
 
 - name: prepare preseed.cfg script from template
   template:
-    src: "preseed.cfg.j2"
+    src: "preseed-{{vm_distribution}}-{{vm_codename}}.cfg.j2"
     dest: "{{playbook_dir}}/roles/vm-create/templates/{{project_source}}/preseed.cfg"
     owner: martin
     group: martin
