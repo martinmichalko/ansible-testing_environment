@@ -27,8 +27,11 @@ in the project directory - change values for variables in group_vars and as root
 ansible-playbook -i inventory create-update-config.yml
 ```
 
+If you use ansible in virtual env then is needed to specify your own python interpreter:
+--extra-vars "ansible_python_interpreter=/data/projects/ansible2-8/bin/python3"
+
 Separate your own file of test environment variables `group_vars/all/test-env-definitions.yml` change them for new project and create whole environment with working directory in the project testing environment as root with command:
 
 ```bash
-ansible-playbook -i {{path_to_your_new_project_dir}}/inventory {{path_to_your_ansible_test_env_project_dir}}/create-update-config.yml --extra-vars "@{{path_to_your_new_project_dir}}/group_vars/all/test-env-definitions.yml" --extra-vars "ansible_python_interpreter=/usr/bin/python"
+ansible-playbook -i {{path_to_your_new_project_dir}}/inventory {{path_to_your_ansible_test_env_project_dir}}/create-update-config.yml --extra-vars "@{{path_to_your_new_project_dir}}/group_vars/all/test-env-definitions.yml" --extra-vars "ansible_python_interpreter={{path_to_your_virtualenv}}/bin/python3"
 ```
