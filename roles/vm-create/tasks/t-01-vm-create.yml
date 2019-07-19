@@ -31,8 +31,9 @@
     command: "list_vms"
   register: vms
 
-- name: create vm
-  command: "virt-install --location {{install_location}} --name {{project_source}}
+- name: create vm install_location "{{install_location}}"
+  command: "virt-install  --location {{install_location}}
+        --name {{project_source}}
         --vcpus {{vm_cpus}},maxvcpus={{vm_cpus}} --ram {{vm_memory}}
         --network network={{project}}.mgmt
         --disk {{volumes_location}}/{{project_source}}.qcow2

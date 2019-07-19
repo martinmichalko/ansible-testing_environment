@@ -10,7 +10,7 @@
 
 - name: create xml for each network
   template:
-    src: virt-network.xml
+    src: virt-network.xml.j2
     dest: "{{playbook_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
     owner: martin
     group: martin

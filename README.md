@@ -35,3 +35,6 @@ Separate your own file of test environment variables `group_vars/all/test-env-de
 ```bash
 ansible-playbook -i {{path_to_your_new_project_dir}}/inventory {{path_to_your_ansible_test_env_project_dir}}/create-update-config.yml --extra-vars "@{{path_to_your_new_project_dir}}/group_vars/all/test-env-definitions.yml" --extra-vars "ansible_python_interpreter={{path_to_your_virtualenv}}/bin/python3"
 ```
+
+Note: at the moment this is functional only for debian 10 - buster only more described in
+https://unix.stackexchange.com/questions/207090/install-vm-from-command-line-with-virt-install

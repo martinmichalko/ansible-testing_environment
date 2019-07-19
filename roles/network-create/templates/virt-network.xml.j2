@@ -5,8 +5,5 @@
   <virtualport type='openvswitch'>
   </virtualport>
   <ip address='{{ item.value.gateway }}' netmask='{{ item.value.netmask }}'>
-     <dhcp>
-       <range start='{{ item.value.dhcp_start }}' end='{{ item.value.dhcp_end }}'/>
-     </dhcp>
   </ip>
 </network>

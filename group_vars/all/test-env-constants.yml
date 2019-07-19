@@ -3,8 +3,9 @@
 system_types:
   debian:
     stretch: 9
+    buster: 10
 
 vm_release: "{{system_types[vm_distribution][vm_codename]}}"
 
-install_location: "http://ftp.sk.debian.org/debian/dists/{{vm_codename}}/main/installer-amd64/"
+install_location: "http://deb.debian.org/debian/dists/stable/main/installer-amd64/"
 ansible_python_interpreter: /usr/bin/python

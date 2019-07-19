@@ -1,13 +1,14 @@
 ---
-volume_pool: virt
-volumes_location: "/data/virt"
+volume_pool: ssd-virt
+volumes_location: "/virt/virtuals"
 
 project: virtuale
 dns_resolver: 192.168.1.1
 
 #vm_os_type: centos-7.3
 vm_distribution: debian
-vm_release: 9
+vm_codename: buster #vm_release: 9 = stretch
+
 
 #for centos image size is not working
 vm_disk_size: "8G"
@@ -23,13 +24,9 @@ forward_mode: nat
 networks:
   mgmt:
     gateway: 192.168.82.1
-    dhcp_start: 192.168.82.150
-    dhcp_end: 192.168.82.224
     netmask: 255.255.255.0
   prod:
     gateway: 192.168.83.1
-    dhcp_start: 192.168.83.150
-    dhcp_end: 192.168.83.224
     netmask: 255.255.255.0
 
 first_ip_address: 11

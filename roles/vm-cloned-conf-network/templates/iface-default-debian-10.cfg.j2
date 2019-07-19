@@ -1,0 +1,5 @@
+iface {{default_iface_item}} inet static
+    address {{networks[sorted_network_keys_list[0]].gateway[:-1]}}{{(first_ip_address + selected_index|int)}}
+    netmask {{networks[sorted_network_keys_list[0]].netmask}}
+    gateway {{networks[sorted_network_keys_list[0]].gateway}}
+    dns-nameservers {{dns_resolver}}
