@@ -1,0 +1,12 @@
+---
+project_source: "{{project}}-{{source}}"
+
+system_types:
+  debian:
+    stretch: 9
+    buster: 10
+
+vm_release: "{{system_types[vm_distribution][vm_codename]}}"
+
+install_location: "http://deb.debian.org/debian/dists/stable/main/installer-amd64/"
+ansible_python_interpreter: /usr/bin/python

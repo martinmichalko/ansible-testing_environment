@@ -1,0 +1,23 @@
+#this file is generated automatically using make_inventory_file.py
+
+#tried also to get those variables to group and host variables in group_var and host_var
+#but that approach did not working
+
+localhost ansible_connection=local
+
+[nodes:vars]
+ansible_connection=ssh
+ansible_ssh_user=root
+
+{% if source == 'source' %}
+[source]
+source.{{ project }}{{ domain[11:] }} ansible_host={{ networks.mgmt.gateway[:-1] }}{{ source_ip_address }}
+{% endif %}
+
+[nodes]
+{% if source == 'source' %}
+source.{{ project }}{{ domain[11:] }} ansible_host={{ networks.mgmt.gateway[:-1] }}{{ source_ip_address }}
+{% endif %}
+{% for node in nodes %}
+{{ node }}.{{ project }}{{ domain[11:] }} ansible_host={{ networks.mgmt.gateway[:-1] }}{{ first_ip_address+loop.index0 }}
+{% endfor %}
