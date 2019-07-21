@@ -1,6 +1,6 @@
 ---
 
-- name: set source_full_ip_address
+- name: set_fact source_full_ip_address
   set_fact:
     source_full_ip_address: "{{networks['mgmt'].gateway[:-1]}}{{source_ip_address}}"
 
