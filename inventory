@@ -7,10 +7,10 @@ ansible_connection=ssh
 ansible_ssh_user=root
 
 [source]
-source.virtuale.mate.solutions ansible_host=192.168.82.5
+source.virtuale.mate.company ansible_host=192.168.82.5
 
 [nodes]
-source.virtuale.mate.solutions ansible_host=192.168.82.5
-node1.virtuale.mate.solutions ansible_host=192.168.82.11
-node2.virtuale.mate.solutions ansible_host=192.168.82.12
-node3.virtuale.mate.solutions ansible_host=192.168.82.13
+source.virtuale.mate.company ansible_host=192.168.82.5
+node1.virtuale.mate.company ansible_host=192.168.82.11
+node2.virtuale.mate.company ansible_host=192.168.82.12
+node3.virtuale.mate.company ansible_host=192.168.82.13

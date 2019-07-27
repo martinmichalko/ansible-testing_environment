@@ -46,7 +46,7 @@ first_ip_address: 11
 #all other ip addresses will be with the step 1
 #derived from network_gateway and first_ip_address
 
-domain: "{{project}}.mate.solutions"
+domain: "{{project}}.mate.company"
 
 dns_planned: False
 
