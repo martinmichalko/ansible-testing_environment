@@ -7,18 +7,18 @@
 
 - name: define networks during loop over subelements in networks
   command: virsh net-define "{{playbook_dir}}/roles/network-create/templates/xml/networks/{{project}}-{{item.key}}.xml"
-  when: '"{{project}}.{{item.key}}" not in virt_net_list.stdout'
+  when: '"{{project}}-{{item.key}}" not in virt_net_list.stdout'
   with_dict: "{{networks}}"
 
 
 - name: start networks during loop over subelements in networks
-  command: virsh net-start "{{project}}.{{item.key}}"
-  when: '"{{project}}.{{item.key}}" not in virt_net_list.stdout'
+  command: virsh net-start "{{project}}-{{item.key}}"
+  when: '"{{project}}-{{item.key}}" not in virt_net_list.stdout'
   with_dict: "{{networks}}"
 
 - name: Configure a network to be automatically started at boot
-  command: virsh net-autostart "{{project}}.{{item.key}}"
-  when: '"{{project}}.{{item.key}}" not in virt_net_list.stdout'
+  command: virsh net-autostart "{{project}}-{{item.key}}"
+  when: '"{{project}}-{{item.key}}" not in virt_net_list.stdout'
   with_dict: "{{networks}}"
 
 - name: delete xml file for each network

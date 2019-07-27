@@ -35,7 +35,7 @@
   command: "virt-install  --location {{install_location}}
         --name {{project_source}}
         --vcpus {{vm_cpus}},maxvcpus={{vm_cpus}} --ram {{vm_memory}}
-        --network network={{project}}.mgmt
+        --network network={{project}}-mgmt
         --disk {{volumes_location}}/{{project_source}}.qcow2
         --initrd-inject={{playbook_dir}}/roles/vm-create/templates/{{project_source}}/preseed.cfg
         --extra-args=auto --graphics vnc --noautoconsole --wait=-1"
@@ -53,6 +53,6 @@
 
 - name: attach new interace to the additional networks
   command: "virsh attach-interface --domain {{project_source}} --type network
-            --source {{project}}.{{item.key}} --config --live"
+            --source {{project}}-{{item.key}} --config --live"
   when: item.key not in vm_interfaces.stdout
   with_dict: "{{networks}}"
